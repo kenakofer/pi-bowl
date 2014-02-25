@@ -13,9 +13,9 @@ virtualized=True
 pins=[13, 15, 16, 18, 22, 3, 5, 7, 11, 12]
 #sound1Location="/home/pi/sound1.wav"
 #sound2Location="/home/pi/sound2.wav"
-soundpath1=path.abspath("/home/pi/Python/frog.wav")
-soundpath2=path.abspath("/home/pi/Python/peacock.wav")
-timepath=path.abspath("/home/pi/Python/time.wav")
+soundpath1=path.abspath("$HOME/Python/frog.wav")
+soundpath2=path.abspath("$HOME/Python/peacock.wav")
+timepath=path.abspath("time.wav")
 team1color="#88ff88"
 team2color="#aaaaff"
 
@@ -131,7 +131,7 @@ def virtualPress(i):
 		timing=False
 		buzzerString.set("Locked: Buzzer "+str(humanBuzzerNum))
 		thread.start_new_thread(flashLock, (i,))
-		thread.start_new_thread(playsound, (int(i/5)+1,))
+		thread.start_new_thread(playsound, (i,))
 		bigString.set(humanBuzzerNum)
 		#state=i
 		#print "state"+str(i)
@@ -153,12 +153,14 @@ def flashLock(i):
 		sleep(.4)
 
 def playsound(i):
-	if i==1:
-		system("aplay "+soundpath1)
-	elif i==2:
-		system("aplay "+soundpath2)
+        if i < 100:
+                system("aplay recognize"+str(i)+".wav")
+	#if i==1:
+	#	system("aplay "+soundpath1)
+	#elif i==2:
+	#	system("aplay "+soundpath2)
 	else:
-		system("aplay "+i)
+                system("aplay "+str(i))
 
 #reset for the next question
 def reset(openall):
