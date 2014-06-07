@@ -13,6 +13,7 @@ The program needs super user privileges to manage the IO pins.
 
 
 Features in common with commercial buzzer systems include:
+
 1. Support for 10 buzzers split into 2 teams of 5.
 
 2. Player Recognition and lockout on buzz-ins.
@@ -22,6 +23,7 @@ Features in common with commercial buzzer systems include:
 
 
 Features going beyond those of a commercial system include:
+
 1. Automatic lockout when time is called.
 
 2. Either immediate player recognition on buzzin (espeak 'Green 1'), or customizable buzzin sounds (frog, peacock).
@@ -44,6 +46,7 @@ Features going beyond those of a commercial system include:
         
 
 Disadvantages of this over a commercial buzzer system:
+
 1. More complicated setup, requiring the pi be hooked up to power, video, powered sound, keyboard, and mouse.  This means a lot more wires, and more opportunity for technical disasters.  I have run two official meets with the pi-bowl, and there were no major glitches that the system could not easily correct.
 
 2. Less intuitive operation, though familiarity with the rules and a little experimentation will quicken understanding.
@@ -51,6 +54,7 @@ Disadvantages of this over a commercial buzzer system:
 
 
 Bugs/TODO (Since the program is entirely functional for its intended use, I will not work at this list unless someone requests it):
+
 1. I recently learned Python and know that I am inconsistent in my naming conventions, and possibly in other conventions that I am not yet aware of.  For example, no classes are used, and the code is entirely contained in the one file.  I don't know how much of this I will change.
 
 2. Finish the configuration panel, which currently does nothing.
