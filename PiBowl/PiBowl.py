@@ -1,12 +1,9 @@
 from time import sleep, time
-#import time
 from Tkinter import *
 import tkMessageBox
 import thread
-#import pygame
 from os import path, system
 
-print "test"
 
 #Constants
 virtualized=True
@@ -21,8 +18,8 @@ team2color="#aaaaff"
 
 #STATE VARIABLES
 inGame=False
-timing=False		#Currently counting down the timer
-deciding=False		#Right/Wrong decision
+timing=False			#Currently counting down the timer
+deciding=False			#Right/Wrong decision
 buzzable=0			#Can be zero for no one, 1 for team 1, 2 for team 2, or -1 for all
 buzzedIn=-1			#-1 for none, 0-9 for buzzers
 interrupted=False
