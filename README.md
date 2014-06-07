@@ -14,7 +14,7 @@ The program needs super user privileges to manage the IO pins.
 
 Features in common with commercial buzzer systems include:
 
-1. Support for 10 buzzers split into 2 teams of 5.
+1. Support for 10 buzzers (2 teams of 5).
 
 2. Player Recognition and lockout on buzz-ins.
 
