@@ -274,11 +274,6 @@ def wrong_no_interrupt():
 	bigString.set("")
 	bigLabel.config(bg=top.cget('bg'))
 	
-	if firstWrong:			#in case of both teams buzz in early, both wrong_no_interrupt
-		firstWrong=false
-	else:
-		firstWrong=true 
-	
 	wrong()
 
 def wrong():
