@@ -273,7 +273,7 @@ def wrong_no_interrupt():
 	
 	bigString.set("")
 	bigLabel.config(bg=top.cget('bg'))
-	firstWrong=False
+	
 	wrong()
 
 def wrong():
