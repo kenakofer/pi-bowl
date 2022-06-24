@@ -1,7 +1,9 @@
+#!/usr/bin/env python3
+
 from time import sleep, time
-from Tkinter import *
-import tkMessageBox
-import thread
+from tkinter import *
+from tkinter import messagebox
+import threading
 from os import path, system
 
 
@@ -37,7 +39,7 @@ if virtualized==False:
 		GPIO.setup(pins[i], GPIO.IN, GPIO.PUD_UP)
 
 
-	
+
 locked = True
 #timestart = 0
 
@@ -48,12 +50,12 @@ locked = True
 #state=-3
 
 
-print "test"
+print("test")
 
 
 
 def espeak(string):
-	thread.start_new_thread(system, ("espeak "+string, ))
+	threading.Thread(target=system, args=("espeak "+string, )).start()
 
 def timer():
 	global timestart, timeString, TIMELIMIT, timeLeft, locked, \
@@ -65,7 +67,7 @@ def timer():
 			delta = time()-timestart
 			if delta > timeLeft:
 				#os.system("espeak time.")
-				thread.start_new_thread(playsound, (timepath,))
+				threading.Thread(target=playsound, args=(timepath,)).start()
 				#espeak("time.")
 				buzzable=0
 				setButtons()
@@ -75,13 +77,13 @@ def timer():
 				reset(True)
 			elif delta%1<.1:
 				string=str(int(timeLeft+1-delta))
-				#print "before"
+				#print("before")
 				try:
 					setTimeString(string) #TODO Why does this throw an error?
 				except AttributeError:
-					print "failed"
+					print("failed")
 				#timeString.
-				#print "commented"
+				#print("commented")
 		else:
 			sleep(.05)
 
@@ -90,9 +92,9 @@ def setTimeString(string):
 
 	try:
 		timeString.set(string) #TODO Why does this throw an error?
-		#print "successfully set to: "+str(string)
+		#print "successfully set to: "+str(string))
 	except AttributeError:
-		print "failed to set to: "+string
+		print("failed to set to: "+string)
 		timeString=StringVar(timeLabel)
 		timeLabel.config(textvariable=timeString)
 		setTimeString(string)
@@ -114,7 +116,7 @@ def buzzercheck():
 def virtualPress(i):
 	global locked, soundLocation, buttons, timeLeft, timeLabel, buzzedIn, deciding, \
 		state, bigLabel, bigString, team1color, team2color, inGame, timing, buzzable, interrupted
-	print "buzzable=",buzzable
+	print("buzzable=",buzzable)
 	if buzzable==-1 or buzzable==int(i/5)+1:
 		if inGame:
 			buzzable=0
@@ -127,11 +129,11 @@ def virtualPress(i):
 		interrupted=not timing
 		timing=False
 		buzzerString.set("Locked: Buzzer "+str(humanBuzzerNum))
-		thread.start_new_thread(flashLock, (i,))
-		thread.start_new_thread(playsound, (i,))
+		threading.Thread(target=flashLock, args=(i,)).start()
+		threading.Thread(target=playsound, args=(i,)).start()
 		bigString.set(humanBuzzerNum)
 		#state=i
-		#print "state"+str(i)
+		#print("state"+str(i))
 		buzzedIn=i
 		setButtons()
 		if i < 5:
@@ -150,14 +152,14 @@ def flashLock(i):
 		sleep(.4)
 
 def playsound(i):
-        if i < 100:
-                system("aplay recognize"+str(i)+".wav")
+	if i < 100:
+		system("aplay recognize"+str(i)+".wav")
 	#if i==1:
 	#	system("aplay "+soundpath1)
 	#elif i==2:
 	#	system("aplay "+soundpath2)
 	else:
-                system("aplay "+str(i))
+		system("aplay "+str(i))
 
 #reset for the next question
 def reset(openall):
@@ -182,12 +184,12 @@ def reset(openall):
 def open():
 	global inGame, locked, timeString, state, buzzable, buzzedIn, deciding
 	#inGame=False
-	
+
 	#If ingame, the buzzin was either a challenge or a mistake.
 	if not inGame:
 		setTimeString("00")
 	#timeString.zfill
-	#print "open"
+	#print("open")
 	buzzable=-1
 	buzzedIn=-1
 	deciding=False
@@ -211,7 +213,7 @@ def setButtons(): #AND LABELS TOO
 		buttons[i].config(state=DISABLED)
 
 	if buzzable==-1:
-		#print 2
+		#print(2)
 		for i in range(0,10):
 			buttons[i].config(state=NORMAL)
 	if buzzable==1:
@@ -245,9 +247,9 @@ def startCountdown():
 	#inGame=True
 	#buzzable=-1
 
-	print "Starting Count"
+	print("Starting Count")
 	setButtons()
-	
+
 def falseStart():
 	global timing, timestart, timeLeft
 	timing=False
@@ -258,22 +260,22 @@ def falseStart():
 
 def correct():
 	global scores, buzzedIn, plus10, question, firstWrong
-	
+
 	scores[buzzedIn][question].config(bg="#77ff77")
 	setLabel(scores[buzzedIn][question], "+10")
 	changeQuestion(1)
-	
+
 	firstWrong=False
 	reset(True)
-	
-	
+
+
 def wrong_no_interrupt():
 	global interrupted, bigLabel, bigString, firstWrong
 	interrupted=False
-	
+
 	bigString.set("")
 	bigLabel.config(bg=top.cget('bg'))
-	
+
 	wrong()
 
 def wrong():
@@ -283,36 +285,36 @@ def wrong():
 	if firstWrong:		#This is the second wrong answer, so proceed to next question
 		setLabel(scores[buzzedIn][question], "0")
 		firstWrong=False
-		print "Next question"
+		print("Next question")
 		changeQuestion(1)
 		addScores()
 		reset(True)
 	else:
 		firstWrong=True
-		
+
 		buzzable=int(buzzedIn/5)+1
-		if buzzable is 1:
+		if buzzable == 1:
 			buzzable=2
 		else:
 			buzzable=1
-			
-		print buzzable
+
+		print(buzzable)
 		if interrupted:
 			scores[buzzedIn][question].config(bg="#ff7777")
 			scores[buzzedIn][question].config(textvariable=minus5)
 			reset(False)
-			#print "Resetting..."
+			#print("Resetting...")
 		else:
 			setLabel(scores[buzzedIn][question], "0")
 			startCountdown()
-			print "Resuming Countdown..."
+			print("Resuming Countdown...")
 			timeLeft = timeLeft+5
 		setTimeString(timeLeft)
 		buzzedIn=-1
 		deciding=False
 		addScores()
 		setButtons()
-		
+
 def changeQuestion(amount):
 	global question, scores, questionLabel, questionnum
 	question+=amount
@@ -332,7 +334,7 @@ def changeQuestion(amount):
 
 def newGame():
 	global locked, inGame, state, question
-	print newGame
+	print(newGame)
 	question=0
 	changeQuestion(0)
 	inGame=True
@@ -345,7 +347,7 @@ def setLabel(label, text):
 	string = StringVar()
 	string.set(text)
 	label.config(textvariable=string)
-	
+
 
 def monitorScoresThread():
 	while True:
@@ -360,32 +362,32 @@ def addScores():
 		for y in range(0,5):
 			for x in range(0,len(scores[y])):
 				try:
-					if x is not question:
+					if x != question:
 						colorCell(scores[y][x])
 					sum+= int(scores[y][x].get())
-						#print int(scores[y][x].get())
+						#print(int(scores[y][x].get()))
 				except ValueError:
 					sum+=0
-					
+
 		setLabel(score1Label, "Score: "+str(sum))
 	except IndexError:
-		print "IndexError"
+		print("IndexError")
 	#Right side scores
 	try:
 		sum=0
 		for y in range(5,10):
 			for x in range(0,len(scores[y])):
 				try:
-					if x is not question:
+					if x != question:
 						colorCell(scores[y][x])
 					sum+= int(scores[y][x].get())
-						#print int(scores[y][x].get())
+						#print(int(scores[y][x].get()))
 				except ValueError:
 					sum+=0
-					
+
 		setLabel(score2Label, "Score: "+str(sum))
 	except IndexError:
-		print "IndexError"
+		print("IndexError")
 
 def colorCell(cell):
 	global leftframe
@@ -407,20 +409,20 @@ def time_plus():
 	global timeLeft
 	timeLeft = timeLeft+5
 	setTimeString(str(int(timeLeft)))
-	
+
 def time_minus():
 	global timeLeft
 	timeLeft = timeLeft-5
 	setTimeString(str(int(timeLeft)))
 
 def configure():
-	print "configuring"
+	print("configuring")
 
 
 def addIndividualScores():
-	print "Nothing here yet"
-	
-	
+	print("Nothing here yet")
+
+
 def dumpScores():
 	global scores
 	message=""
@@ -432,9 +434,9 @@ def dumpScores():
 		for y in range(5,10):
 			message+=make3String(scores[y][x].get())
 		message+="\n"
-	print message
-	tkMessageBox.showinfo("Scores Dump", message)
-			
+	print(message)
+	messagebox.showinfo("Scores Dump", message)
+
 def make3String(string):
 	if string == "":
 		return "__ "
@@ -471,7 +473,7 @@ timeLabel=Label(timeFrame, textvariable=timeString, width=2, justify="center", f
 timeLabel.grid(row=0, column=2)
 plusButton=Button(timeFrame, text="+", width=1, command=time_plus)
 plusButton.grid(row=0, column=3, padx=10)
-falseStartButton=Button(timeFrame, text="False Start", width=1, command=falseStart)
+falseStartButton=Button(timeFrame, text="Reset", width=2, command=falseStart)
 falseStartButton.grid(row=0, column=4)
 #timeLabel.pack()
 
@@ -529,9 +531,9 @@ bigLabel.grid(row=9, sticky='nesw', column=0, columnspan=11)
 #bigLabel.pack(side='bottom', fill=BOTH)
 
 
-thread.start_new_thread(timer, ())
+threading.Thread(target=timer, args=()).start()
 if virtualized==False:
-	thread.start_new_thread(buzzercheck, ())
+	threading.Thread(target=buzzercheck, args=()).start()
 
 scores=[]
 buttons=[]
@@ -539,7 +541,7 @@ questionnum=6
 leftframe=Frame(top)
 leftframe.grid(row=0, column=0, rowspan=6, columnspan=5, sticky='n')
 #leftframe.grid(row=0, column=0)
-for i in range(0,5):	
+for i in range(0,5):
 	buttons.append(Button(leftframe, text=str(i+1), bg=team1color,
 		command=lambda i=i: virtualPress(i)))
 	buttons[i].grid(row=200, column=i)
@@ -550,8 +552,8 @@ for i in range(0,5):
 		e = Entry(leftframe, textvariable=string, width=4, bd=1,  bg=leftframe.cget('bg'), justify="center")
 		scores[i].append(e)
 		e.grid(row=j, column=i, pady=0, padx=0)
-		#print "created",i,j
-		
+		#print("created",i,j)
+
 #	buttons[i].pack(side='left')
 
 rightframe=Frame(top)
@@ -567,9 +569,9 @@ for i in range(5,10):
 		e = Entry(rightframe, textvariable=string, width=4, bd=1, bg=rightframe.cget('bg'), justify="center")
 		scores[i].append(e)
 		e.grid(row=j, column=i-5, pady=0, padx=0)
-		#print "created",i,j
+		#print("created",i,j)
 #for i in [9, 8, 7, 6, 5]:  #NEED TO ADD IN OPPOSITE ORDER TO APPEAR CORRECTLY
-#	print "not"
+#	print("not")
 #	buttons[i].pack(side='right')
 
 
@@ -608,10 +610,10 @@ reset(True)
 buzzable=0
 setButtons()
 
-thread.start_new_thread(monitorScoresThread, ())
+threading.Thread(target=monitorScoresThread, args=()).start()
 
 
-print "Starting loop..."
+print("Starting loop...")
 
 
 top.mainloop()
