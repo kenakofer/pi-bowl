@@ -1,6 +1,8 @@
 pi-bowl
 =======
 
+![Pibowl screenshot](pi-bowl-screenshot.png)
+
 A Python (Tkinter, RPi.GPIO) program for running a scholars bowl buzzer hub from a Raspberry Pi, managing timing, scoring, buzzer lockout, and player recognition.
 
 More specifically, this program allows a Raspberry Pi to replace a commercial buzzer hub, while being magnitudes more useful  If you make your own buzzer devices (just a button closing a circuit), you can save hundreds of dollars by not purchasing a buzzer system at all.
@@ -43,14 +45,14 @@ Features going beyond those of a commercial system include:
 9. Enables a location to be run by two individuals (judge and pi moderator) rather than four or five (judge, moderator, timer, scorer, and buzzer operator).  I have done this at both a high school and junior high meet.
 
 10. Virtualized testing.  In other words, you can modify and test the program on any computer, and by pressing the on-screen buttons, can simulate a buzzer press without having any actual buzzers or a raspberry pi.  This is very handy for debugging.  Remember to set VIRTUALIZED=False to enable buzzer devices.
-        
+
 
 Disadvantages of this over a commercial buzzer system:
 
 1. More complicated setup, requiring the pi be hooked up to power, video, powered sound, keyboard, and mouse.  This means a lot more wires, and more opportunity for technical disasters.  I have run two official meets with the pi-bowl, and there were no major glitches that the system could not easily correct.
 
 2. Less intuitive operation, though familiarity with the rules and a little experimentation will quicken understanding.
-        
+
 
 
 Bugs/TODO (Since the program is entirely functional for its intended use, I will not work at this list unless someone requests it):
@@ -72,4 +74,3 @@ Bugs/TODO (Since the program is entirely functional for its intended use, I will
 8. Paths used for sounds files are not consistent (some absolute, some relative). The program should thus be run in the containing directory, and the file paths modified in PiBowl.py to reflect their location.
 
 9. Many debugging comments left in.  I am not a very neat programmer
-
